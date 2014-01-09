@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var map = null;
+		
+		function GetMap()
+		{
+			map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), 
+				{credentials:"Ar31XPc8UKrmZMDPsEVNjdAcz4yyfLtrqAkSKrNnd-RQVpFUqz4xZH1UqqTOraQI"});
+			
+			var center = map.getCenter();
+			var pin = new Microsoft.Maps.Pushpin(center, 
+				{icon:'red-dot.svg', draggable:false, height:0});
+			
+			map.entities.push(pin);
+		}
+		function CallGeocode(json)
+		{
+			var credentials = "Ar31XPc8UKrmZMDPsEVNjdAcz4yyfLtrqAkSKrNnd-RQVpFUqz4xZH1UqqTOraQI";
+			
+			$.getJSON(json).done(function(data){
+				for(var i=0; i< data['data'].length; i++)
+				{
+					var lat = data['data'][i]['lat'];
+					var lng = data['data'][i]['long'];
+					var senti = parseInt(data['data'][i]['sentiment']);
+					var loc = new Microsoft.Maps.Location(lat, lng);
+					if(senti == 1)
+						var pin = new Microsoft.Maps.Pushpin(loc, {icon:'red-dot.svg', draggable:false, height:0});
+					else if(senti == -1)
+						var pin = new Microsoft.Maps.Pushpin(loc, {icon:'green-dot.svg', draggable:false, height:0});
+					else
+						var pin = new Microsoft.Maps.Pushpin(loc, {icon:'grey-dot.svg', draggable:false, height:0});
+					map.entities.push(pin);
+				}
+			});
+		}
+		
+		$(document).ready(function(){
+			GetMap();
+			CallGeocode("temp.json");
+		});
+	</script>
+</head>
+<body> 
+	<div id='mapDiv' style="position:absolute; width:800px; height:600px;"></div>
+</body>
+</html>
