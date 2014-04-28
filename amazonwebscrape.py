@@ -31,9 +31,9 @@ def connect(url):
 
 def getAccessToken() :
 
-	myAWSId = 'AKIAIPFKJF4DDQCRTQOA'
-	myAWSSecret = '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'
-	myEndPoint = 'ecs.amazonaws.com'
+	myAWSId = 'Yout-AWS-ID'
+	myAWSSecret = 'AWS-Secret'
+	myEndPoint = 'AWS-Endpoint'
 
 	amazon = bottlenose.Amazon(myAWSId, myAWSSecret, Version="2009-10-01")
         return amazon
@@ -94,7 +94,8 @@ def amazon(amazon, keyword):
 		
 		temp["weight"] = wt
                 temp["sentiment"]=s
-                temp["userid"]=s                
+                temp["userid"]=s
+                
 		ans["data"].append(temp)
 	data2 = sorted(ans['data'], key = lambda user: user['weight'],reverse=True)
 	ans["data"]=data2
